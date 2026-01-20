@@ -41,7 +41,7 @@ class AgentVisualizer:
         try:
             if 'MiniGrid' in self.env_name:
                 self.env = make_minigrid_env(self.env_name)
-            elif 'Bullet' in self.env_name:
+            elif 'BulletEnv' in self.env_name:
                 self.env = make_pybullet_env(self.env_name)
             else:
                 self.env = gym.make(self.env_name, render_mode='human')

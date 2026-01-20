@@ -131,7 +131,7 @@ class ExperimentRunner:
         """Create and return an environment."""
         if "MiniGrid" in env_name:
             return make_minigrid_env(env_name)
-        elif "Bullet" in env_name:
+        elif "BulletEnv" in env_name:
             return make_pybullet_env(env_name)
         else:
             return gym.make(env_name)
