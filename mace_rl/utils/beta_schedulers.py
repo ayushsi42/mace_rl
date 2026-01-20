@@ -365,44 +365,7 @@ def get_preset_scheduler(preset_name: str) -> BetaScheduler:
         raise ValueError(f"Unknown preset: {preset_name}. "
                         f"Available presets: {list(SCHEDULER_PRESETS.keys())}")
     
-    config = SCHEDULER_PRESETS[preset_name]
+    config = SCHEDULER_PRESETS[preset_name].copy()
     scheduler_type = config.pop('scheduler_type')
     return create_beta_scheduler(scheduler_type, **config)
 
-
-if __name__ == "__main__":
-    # Test the schedulers
-    import matplotlib.pyplot as plt
-    
-    episodes = range(1000)
-    
-    # Test different schedulers
-    schedulers = {
-        'Constant': ConstantScheduler(beta_value=0.5),
-        'Linear Decay': LinearDecayScheduler(beta_initial=1.0, beta_min=0.1, decay_episodes=800),
-        'Exponential Decay': ExponentialDecayScheduler(beta_initial=1.0, decay_rate=0.997),
-        'Cosine Annealing': CosineAnnealingScheduler(beta_initial=1.0, beta_min=0.1, period=500),
-        'Step Decay': StepDecayScheduler(beta_initial=1.0, decay_steps=[200, 500, 800]),
-        'Warmup-Cooldown': WarmupCooldownScheduler(beta_peak=1.5, warmup_episodes=200),
-        'Cyclical': CyclicalScheduler(beta_min=0.1, beta_max=1.0, cycle_length=200)
-    }
-    
-    plt.figure(figsize=(15, 10))
-    
-    for name, scheduler in schedulers.items():
-        betas = []
-        for episode in episodes:
-            beta = scheduler.update(episode=episode)
-            betas.append(beta)
-        
-        plt.plot(episodes, betas, label=name, linewidth=2)
-    
-    plt.xlabel('Episode')
-    plt.ylabel('Beta Value')
-    plt.title('Beta Scheduler Comparison')
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.ylim(0, 1.6)
-    plt.tight_layout()
-    plt.savefig('beta_scheduler_comparison.png', dpi=300, bbox_inches='tight')
-    plt.show()
